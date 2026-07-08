@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FilmShorts — TikTok Connected</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 520px;
+      margin: 48px auto;
+      padding: 0 16px;
+      line-height: 1.5;
+    }
+    .ok { color: #0a7; }
+    .err { color: #c00; }
+    code {
+      display: block;
+      word-break: break-all;
+      background: #f4f4f4;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 12px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>FilmShorts</h1>
+  <p id="message">Processing…</p>
+  <div id="details"></div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const error = params.get("error");
+    const msg = document.getElementById("message");
+    const details = document.getElementById("details");
+
+    if (error) {
+      msg.className = "err";
+      msg.textContent = "TikTok authorization failed";
+      details.innerHTML =
+        "<p><strong>Error:</strong> " + error + "</p>" +
+        "<p>" + (params.get("error_description") || "") + "</p>" +
+        "<p>Close this tab and run <code>python main.py tiktok-auth</code> again.</p>";
+    } else if (code) {
+      msg.className = "ok";
+      msg.textContent = "TikTok connected — you can close this tab.";
+      details.innerHTML =
+        "<p>Return to your terminal. If using QR login, the token saves automatically.</p>";
+    } else {
+      msg.textContent = "No authorization data in this URL.";
+      details.innerHTML = "<p>Run <code>python main.py tiktok-auth</code> from FilmShorts.</p>";
+    }
+  </script>
+</body>
+</html>
